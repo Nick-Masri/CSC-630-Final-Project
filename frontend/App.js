@@ -1,21 +1,34 @@
+import FirstPage from './screens/FirstPage'
+import LoginScreen from './screens/LoginScreen'
+import SignUpScreen from './screens/SignUpScreen'
+
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { createStackNavigator, createAppContainer } from 'react-navigation'
+
+
+// Takes multiple JS files and puts them into one with support for navigation between them
+const AppNavigator = createStackNavigator({
+  Redirect : {
+    screen: FirstPage,
+  },
+  LoginScreen : {
+    screen: LoginScreen,
+  },
+  SignUpScreen : {
+    screen: SignUpScreen,
+  },
+  Home: {
+    screen: HomePage,
+  }
+  {initialRouteName: "Redirect"}
+);
+
+const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
-    );
+  render(){
+    return(
+      <AppContainer />
+    )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

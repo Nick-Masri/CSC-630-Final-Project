@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   button: {
     borderColor: '#FFF',
-    fontSize: '24',
+    fontSize: 24,
   },
   signUpButton: {
     marginBottom: 50,
@@ -76,8 +76,6 @@ const styles = StyleSheet.create({
   },
   facebook: {
     borderColor: '#0000CC',
-  }
-  }
   }
 });
 
@@ -137,37 +135,23 @@ export default class FirstPage extends Component {
     }
   }
 
-  invalidAuthentication = () => {
-    Alert.alert(
-      'Invalid',
-      this.state.invalidReason,
-      [
-        {text: 'Ok'},
-      ],
-      {cancelable: false},
-    );
-  }
+  // invalidAuthentication = () => {
+  //   Alert.alert(
+  //     'Invalid',
+  //     this.state.invalidReason,
+  //     [
+  //       {text: 'Ok'},
+  //     ],
+  //     {cancelable: false},
+  //   );
+  // }
+  //
+  // invalidEmail = () => {
+  //   this.setState({
+  //     warningText: "Please enter a valid Andover.edu Email Address"
+  //   })
+  // }
 
-  invalidEmail = () => {
-    this.setState({
-      warningText: "Please enter a valid Andover.edu Email Address"
-    })
-  }
-
-  verify = (email) => {
-    this.setState({
-      email:email
-    });
-    let reg = /[a-z]+[0-9]*@andover\.edu/;
-    if (reg.test(email) === false){
-      this.invalidEmail();
-    } else {
-      this.setState({
-        isEmail: true,
-        warningText: ''
-      });
-    }
-  }
 
   render() {
     return (

@@ -1,6 +1,7 @@
 import FirstPage from './screens/FirstPage'
 import LoginScreen from './screens/LoginScreen'
 import SignUpScreen from './screens/SignUpScreen'
+import HomePage from './screens/Homepage'
 
 import React from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation'
@@ -19,7 +20,7 @@ const AppNavigator = createStackNavigator({
   },
   Home: {
     screen: HomePage,
-  }
+  }},
   {initialRouteName: "Redirect"}
 );
 

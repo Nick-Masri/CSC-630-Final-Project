@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">EasyEat</string>
+    <string name="facebook_app_id">671677586579136</string>
+    <string name="fb_login_protocol_scheme">fb671677586579136</string>
 </resources>

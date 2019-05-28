@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
   },
   logo: {
     height: 250,
@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
   signUpButton: {
     backgroundColor: '#DC493A',
     borderColor: '#DC493A',
+    marginBottom: 20,
   },
   buttonText: {
     fontSize: 28,
@@ -69,7 +70,7 @@ export default class FirstPage extends Component {
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.loginButton, styles.button]}
+            style={[styles.signUpButton, styles.button]}
             onPress={() => this.props.navigation.navigate('SignUp')}
             >
             <Text style={styles.buttonText}>Sign Up</Text>

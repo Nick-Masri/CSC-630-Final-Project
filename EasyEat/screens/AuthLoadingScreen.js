@@ -4,7 +4,6 @@ import { Text, View, Image, StyleSheet, TouchableOpacity, Alert, TextInput, Acti
 import { AccessToken } from 'react-native-fbsdk';
 
 
-
 export default class FirstPage extends Component {
   constructor(props) {
     super(props);
@@ -15,7 +14,7 @@ export default class FirstPage extends Component {
     const accessToken = await AccessToken.getCurrentAccessToken();
     let isLoggedIn = accessToken != null && accessToken.getExpires();
 
-    this.props.navigation.navigate(isLoggedIn ? 'Home' : 'Auth');
+    this.props.navigation.navigate(isLoggedIn ? 'App' : 'Auth');
   }
 
   render() {

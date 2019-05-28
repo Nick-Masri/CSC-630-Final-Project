@@ -7,7 +7,6 @@ export default class FBLoginButton extends Component {
     return (
       <View>
         <LoginButton
-          publishPermissions={["email"]}
           onLoginFinished={
             (error, result) => {
               if (error) {
@@ -15,7 +14,7 @@ export default class FBLoginButton extends Component {
               } else if (result.isCancelled) {
                 alert("Login was cancelled");
               } else {
-                this.props.navigation.navigate("Home");
+                this.props.navigation.navigate('App');
                 alert("Login was successful with permissions: " + result.grantedPermissions)
               }
             }

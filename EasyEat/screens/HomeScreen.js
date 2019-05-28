@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { StyleSheet, TouchableOpacity, FlatList, View, Text} from 'react-native';
+import { StyleSheet, TouchableOpacity, FlatList, View, Text, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const styles = StyleSheet.create({
     pageContainer: {
@@ -140,10 +141,27 @@ export default class FirstPage extends Component {
             tab: ""
         }
     }
+    // 
+    // componentDidMount() {
+    //     this.getData();
+    // }
 
     static navigationOptions = {
         header: null
     };
+    //
+    // getData = async () => {
+    //   try {
+    //     const value = await AsyncStorage.getItem('userInfo')
+    //     if(value !== null) {
+    //       alert(value);
+    //     }
+    //     alert(value);
+    //   } catch(e) {
+    //       alert(e);
+    //     // error reading value
+    //   }
+    // }
 
     renderItem = (data) => {
         return (

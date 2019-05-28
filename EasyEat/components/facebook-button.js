@@ -15,7 +15,7 @@ export default class FBLoginButton extends Component {
               } else if (result.isCancelled) {
                 alert("Login was cancelled");
               } else {
-                this.props.navigation.navigate('App');
+                this.props.navigation.navigate("Home");
                 alert("Login was successful with permissions: " + result.grantedPermissions)
               }
             }

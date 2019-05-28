@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 35,
     borderRadius: 18,
-    marginTop: 50,
+    marginTop: 15,
     width: 350,
     borderWidth: 2,
   },
@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
     borderColor: '#FFF',
   },
   signUpButton: {
-    marginBottom: 50,
     backgroundColor: '#DC493A',
     borderColor: '#DC493A',
   },

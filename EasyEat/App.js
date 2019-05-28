@@ -23,8 +23,8 @@ import LoginScreen from './screens/LoginScreen'
 import AuthScreen from './screens/AuthScreen'
 import AuthLoadingScreen from './screens/AuthLoadingScreen'
 
-const AppStack = createStackNavigator({ Home:HomeScreen });
-const AuthStack = createStackNavigator({SignUp: SignUpScreen, Login: LoginScreen, AuthRedirect: AuthScreen});
+const AppStack = createStackNavigator({Home:HomeScreen });
+const AuthStack = createStackNavigator({AuthRedirect: AuthScreen, SignUp: SignUpScreen, Login: LoginScreen,});
 
 AppContainer =  createAppContainer(createSwitchNavigator(
   {

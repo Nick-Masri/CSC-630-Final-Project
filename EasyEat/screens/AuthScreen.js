@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'flex-start',
   },
   logo: {
     height: 250,
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     fontSize: 60,
     color: '#FFF',
     marginBottom: 40,
-    marginTop: 65,
+    marginTop: 20,
     textAlign: 'center'
   },
   button: {
@@ -65,15 +65,15 @@ export default class FirstPage extends Component {
           <Image source={require('./../assets/table.png')} style={styles.logo} />
           <TouchableOpacity
             style={[styles.loginButton, styles.button]}
-            onPress={() => this.props.navigation.navigate('LoginScreen')}
+            onPress={() => this.props.navigation.navigate('Login')}
             >
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.loginButton, styles.button]}
-            onPress={() => this.props.navigation.navigate('LoginScreen')}
+            onPress={() => this.props.navigation.navigate('SignUp')}
             >
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
         </View>
       </View>

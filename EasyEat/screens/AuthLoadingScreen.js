@@ -1,24 +1,29 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
-import { Text, View, Image, StyleSheet, TouchableOpacity, Alert, TextInput } from 'react-native';
+import { Text, View, Image, StyleSheet, TouchableOpacity, Alert, TextInput, ActivityIndicator, StatusBar} from 'react-native';
 import { AccessToken } from 'react-native-fbsdk';
 
+
+
 export default class FirstPage extends Component {
+  constructor(props) {
+    super(props);
+    this.redirect();
+  }
 
-  const accessData = await AccessToken.getCurrentAccessToken();
-  consle.log(accessData.accessToken)
+  redirect = async () => {
+    const accessToken = await AccessToken.getCurrentAccessToken();
+    let isLoggedIn = accessToken != null && accessToken.getExpires();
 
-  function ScreenDirect(props) {
-    const isLoggedIn = props.isLoggedIn
-    if (isLoggedIn) {
-      return <UserGreeting />;
-    }
-    return <GuestGreeting />;
+    this.props.navigation.navigate(isLoggedIn ? 'Home' : 'Auth');
   }
 
   render() {
     return (
-      <ScreenDirect isLoggedIn={false} />
+      <View>
+        <ActivityIndicator />
+        <StatusBar barStyle="default" />
+      </View>
     );
   }
 }

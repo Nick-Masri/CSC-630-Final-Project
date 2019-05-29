@@ -39,13 +39,23 @@ const inputProps = {
 
 export default class App extends React.Component {
 
-    state = {
-        tags: [],
-        text: "",
-        location: "",
-        amount_payed: "",
-        date: "",
-    };
+    constructor(props){
+        super(props)
+        this.state = {
+            tags: [],
+            text: "",
+            location: "",
+            amount_payed: "",
+            date: "",
+            fbID: "",
+        };
+    }
+
+    componentDidMount = () => {
+        this.getData.then(() => {
+            console.log('got fbID');
+        })
+    }
 
     onChangeTags = (tags) => {
         this.setState({ tags });
@@ -65,6 +75,17 @@ export default class App extends React.Component {
         }
     }
 
+    getData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@fbID')
+            if(value !== null) {
+                this.setState({fbID: value})
+            }
+        } catch(e) {
+            // error reading value
+        }
+    }
+
     submitPage = () => {
         fetch('localhost/plans', {
             method: 'POST',
@@ -73,6 +94,7 @@ export default class App extends React.Component {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+                fbID: this.state.fbID,
                 location_name: this.state.location,
                 date: this.state.date,
                 amount_payed: this.state.amount_payed,

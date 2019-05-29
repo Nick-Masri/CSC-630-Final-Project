@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
 import { StyleSheet, TouchableOpacity, FlatList, View, Text, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const styles = StyleSheet.create({
     pageContainer: {
@@ -131,14 +132,51 @@ const styles = StyleSheet.create({
     }
 });
 
-
 export default class FirstPage extends Component {
 
     constructor(props){
         super(props);
         this.state = {
-            tab: "",
+            accessToken: '',
+            fbID:'',
+            name: '',
+            data: [],
         }
+
+        this._getData();
+    }
+
+    _getData = () => {
+        AsyncStorage.getItem('@accessToken').then((result) => {
+            this.setState({accessToken: result});
+        }).then(() => {
+            fetch(`https://graph.facebook.com/me?access_token=${this.state.accessToken}`)
+            .then((response) => response.json())
+            .then((res) => {
+                this.setState({
+                    name: res.name,
+                    fbID: res.id,
+                });
+                console.log(res.name);
+                console.log(res.id);
+                console.log(this.state.accessToken);
+            })
+            .catch((err) => console.log('error occurred', err.message));
+        });
+      }
+
+
+    getMeals = () => {
+        fetch(`localhost?id=${this.state.fbID}`)
+        .then((response) => response.json())
+        .then((res) => {
+
+            if (res.data.length !== 0){
+                this.setState({
+                    data: res.data,
+                })
+            }
+        });
     }
 
     static navigationOptions = {
@@ -149,16 +187,16 @@ export default class FirstPage extends Component {
 
         return (
             <View style={styles.listItem}>
-                <View style={styles.listMainRow}>
-                    <Text style={styles.listHeader}>{data.item.listHeader}</Text>
-                </View>
-                <View>
-                    <Text style={styles.friends}>With: {data.item.friends}</Text>
-                </View>
-                <View style={styles.listInfo}>
-                    <Text style={styles.listInfoText}>You paid ${data.item.cost}</Text>
-                    <Text style={styles.listInfoText}>{data.item.date}</Text>
-                </View>
+            <View style={styles.listMainRow}>
+            <Text style={styles.listHeader}>{data.item.listHeader}</Text>
+            </View>
+            <View>
+            <Text style={styles.friends}>With: {data.item.friends}</Text>
+            </View>
+            <View style={styles.listInfo}>
+            <Text style={styles.listInfoText}>You paid ${data.item.cost}</Text>
+            <Text style={styles.listInfoText}>{data.item.date}</Text>
+            </View>
             </View>
         );
     }
@@ -167,51 +205,41 @@ export default class FirstPage extends Component {
         return (
             <View style={styles.page}>
 
-                <View style={styles.navbar}>
+            <View style={styles.navbar}>
 
-                    <View style={styles.mainNav}>
-                    {    //<Icon name="bars" style={styles.menuIcon}/>
-                    }
-                        <Text style={styles.pageHeader}>History</Text>
-                    </View>
+            <View style={styles.mainNav}>
+            {    //<Icon name="bars" style={styles.menuIcon}/>
+        }
+        <Text style={styles.pageHeader}>History</Text>
+        </View>
 
-                    {
-                    //     <View style={styles.tab}>
-                    //     <View style={[styles.tabHeader, styles.highlight]}>
-                    //         <Text style={styles.tabText}>Me</Text>
-                    //     </View>
-                    //     <View style={styles.tabHeader}>
-                    //         <Text style={styles.tabText}>Friends</Text>
-                    //     </View>
-                    // </View>
-                    }
-                </View>
+        {
+            //     <View style={styles.tab}>
+            //     <View style={[styles.tabHeader, styles.highlight]}>
+            //         <Text style={styles.tabText}>Me</Text>
+            //     </View>
+            //     <View style={styles.tabHeader}>
+            //         <Text style={styles.tabText}>Friends</Text>
+            //     </View>
+            // </View>
+        }
+        </View>
 
-                <View style={styles.pageContainer}>
-                    <View style={styles.widthContainer}>
-                        <FlatList
-                        contentContainerStyle={styles.list}
-                        data={[{
-                            listHeader: "Dinner at Yama Fuji",
-                            friends: "Jack, Jenn, and Jake",
-                            cost: "28",
-                            date: "5/28/19",
-                        }, {
-                            listHeader: "Lunch at La Rosas",
-                            friends: "Catherine",
-                            cost: "17",
-                            date: "5/22/19"
-                        }]}
-                        extraData={this.state}
-                        renderItem={this.renderItem}
-                        />
-                        <View style={styles.footer}>
-                            <Icon name="plus" style={styles.plusIcon} onPress={() => {this.props.navigation.navigate('New')}}/>
-                        </View>
-                    </View>
-                </View>
+        <View style={styles.pageContainer}>
+        <View style={styles.widthContainer}>
+        <FlatList
+        contentContainerStyle={styles.list}
+        data={this.state.data}
+        extraData={this.state}
+        renderItem={this.renderItem}
+        />
+        <View style={styles.footer}>
+        <Icon name="plus" style={styles.plusIcon} onPress={() => {this.props.navigation.navigate('New')}}/>
+        </View>
+        </View>
+        </View>
 
-            </View>
-        );
-    }
+        </View>
+    );
+}
 }

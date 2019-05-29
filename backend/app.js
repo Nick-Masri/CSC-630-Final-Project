@@ -1,4 +1,4 @@
-equire('dotenv').config();
+require('dotenv').config();
 
 const express = require("express");
 const app = express();
@@ -12,7 +12,12 @@ app.use(bodyParser.json())
 // Knex Setup
 var knex = require('knex')({
   client: 'pg',
-  connection: process.env.DATABASE_URL,
+  connection: {
+      host : 'localhost',
+      user : 'postgres',
+      password : 'nick123',
+      database : 'EasyEats'
+    },
   ssl: true
 });
 require('knex-paginator')(knex);
@@ -30,6 +35,24 @@ app.get("/users", function(req, res){
     .select("*")
     .modify(function(queryBuilder){
       if("name" in req.query) queryBuilder.where('search_body', 'like', '%' + req.query.name.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").toLowerCase() + '%');
+      if("id" in req.query) queryBuilder.where('facebook_id', req.query.id);
+    })
+    .paginate(30, req.query.page ? parseInt(req.query.page) : 1) //Paginate
+    .then(function(results){
+      res.json(results);
+    })
+    .catch(function(e){
+      console.log(e);
+      res.status(500);
+      res.send("ERROR");
+    });
+});
+
+// Search Plans
+app.get("/plans", function(req, res){
+  knex.from("people")
+    .select("*")
+    .modify(function(queryBuilder){
       if("id" in req.query) queryBuilder.where('facebook_id', req.query.id);
     })
     .paginate(30, req.query.page ? parseInt(req.query.page) : 1) //Paginate

@@ -10,29 +10,27 @@ export default class FBLoginButton extends Component {
         this.state({
             auth: this.props.auth,
             accessToken: "",
-            fbID: "",
-            name: "",
         })
+
+        if (this.props.auth == 'login'){
+            this._storeInfo();
+        } else if (this.props.auth == 'signup'){
+            this._registerUser();
+        }
     }
 
-    getUserInfo = () => {
+    _getUserInfo = async () => {
         AccessToken.getCurrentAccessToken().then(
             (data) => {
-                fetch(`https://graph.facebook.com/me?access_token=${data.accessToken.toString()}`)
-                .then((response) => response.json())
-                .then((res) => {
-                    var socialOptions = {
-                        name: res.name,
-                        accessToken: data.accessToken.toString(),
-                        fbID: res.id,
-                    }
-                })
-                .catch((err) => console.log('error occurred', err.message));
-
-            }) // end getCurrentAccessToken
+                this.setState({accessToken: data.accessToken.toString()})
+            }).then(() => {
+                AsyncStorage.setItem('@AccessToken', this.state.accessToken).then(() => {
+                    console.log("stored access token")
+                });
+            });// end getCurrentAccessToken
         }
 
-        registerUser = () => {
+        _registerUser = () => {
             fetch('localhost/users', {
                 method: 'POST',
                 headers: {
@@ -44,21 +42,10 @@ export default class FBLoginButton extends Component {
                     name: this.state.name,
                 }),
             }).then(() => {
-                this.storeInfo();
+                this._getUserInfo();
             });
         }
 
-        storeInfo = async () => {
-            this.getUserInfo().then(() => {
-                try {
-                    await AsyncStorage.setItem('@AccessToken', this.state.accessToken);
-                    await AsyncStorage.setItem('@name', this.state.name);
-                    await AsyncStorage.setItem('@fbID', this.state.fbID);
-                } catch (e) {
-                    // saving error
-                }
-            });
-        }
 
         render() {
             return (

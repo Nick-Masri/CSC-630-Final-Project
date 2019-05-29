@@ -143,6 +143,9 @@ export default class FirstPage extends Component {
             data: [],
         }
 
+    }
+
+    componentDidMount = () => {
         this._getData();
     }
 

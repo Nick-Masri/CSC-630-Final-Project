@@ -191,7 +191,7 @@ export default class App extends React.Component {
             />
             </View>
             <View style={styles.footer}>
-            <Icon.Button name="arrow-right" style={styles.plusIcon} onPress={() => {this.submitPage()}}/>
+            <Icon name="arrow-right" style={styles.plusIcon} onPress={() => {this.submitPage()}}/>
             </View>
             </View>
         );

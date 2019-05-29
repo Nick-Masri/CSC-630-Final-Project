@@ -7,7 +7,7 @@ module.exports = {
   initialize: function(knex){
     knex.schema.hasTable('users').then(function(exists){
       if(!exists) knex.schema.createTable('users', function(table){
-        table.integer('facebook_id');
+        table.string('facebook_id');
         table.string('name');
       })
       .then(function(){
@@ -17,10 +17,10 @@ module.exports = {
 
     knex.schema.hasTable('plans').then(function(exists){
       if(!exists) knex.schema.createTable('plans', function(table){
-        table.bigInteger('facebook_id');
+        table.string('facebook_id');
         table.string('location_name');
         table.string('friends');
-        table.integer('amount_payed');
+        table.string('amount_payed');
         table.string('date');
       })
       .then(function(){

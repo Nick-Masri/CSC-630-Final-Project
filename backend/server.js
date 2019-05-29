@@ -66,7 +66,7 @@ app.get("/plans", function(req, res){
 
 // Create users
 app.post("/users", function(req, res) {
-  knex("select").select().where("facebook_id", req.body['facebook_id']).then((response) => {
+  knex("select").select().where("facebook_id", req.body.facebook_id.).then((response) => {
     if (!response.length){ // Check if the username doesn't already exist
       knex("users").insert({
         facebook_id: req.body.facebook_id,
@@ -83,11 +83,11 @@ app.post("/users", function(req, res) {
 // Create plan
 app.post("/plans", function(req, res) {
     knex("plans").insert({
-        facebook_id: req.body['facebook_id'],
-        location_name: req.body['location_name'],
-        friends: req.body['friends'],
-        amount_payed: req.body['amount_payed'],
-        date: req.body['date']
+        facebook_id: req.body.facebook_id,
+        location_name: req.body.location_name.,
+        friends: req.body.friends.,
+        amount_payed: req.body.amount_payed.,
+        date: req.body.date.
     }).then(() => {
         res.status(200).send("succesfully added meal to database")
     });

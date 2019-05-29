@@ -2,9 +2,9 @@
   "name": "csc630-final-project",
   "version": "1.0.0",
   "description": "A repo for my CSC630 final project",
-  "main": "server.js",
+  "main": "backend/server.js",
   "scripts": {
-    "start": "server.js",
+    "start": "backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

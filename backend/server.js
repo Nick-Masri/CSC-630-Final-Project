@@ -49,6 +49,7 @@ app.get("/users", function(req, res){
       console.log(e);
       res.status(500);
       res.send("ERROR");
+      res.send(e);
     });
 });
 

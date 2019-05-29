@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { Button } from 'react-native-elements';
-import { Text, View, Image, StyleSheet, TouchableOpacity, Alert, TextInput, ActivityIndicator, StatusBar} from 'react-native';
+import { View, ActivityIndicator, StatusBar} from 'react-native';
 import { AccessToken } from 'react-native-fbsdk';
-
 
 export default class FirstPage extends Component {
   constructor(props) {
@@ -12,9 +10,25 @@ export default class FirstPage extends Component {
 
   redirect = async () => {
     const accessToken = await AccessToken.getCurrentAccessToken();
-    let isLoggedIn = accessToken != null && accessToken.getExpires();
+    const isLoggedIn = accessToken != null && accessToken.getExpires();
 
-    this.props.navigation.navigate(isLoggedIn ? 'App' : 'Auth');
+    if (isLoggedIn){
+        const data = await this._getData(accessToken);
+        console.log(accessToken);
+        data.token = accessToken.toString();
+        this.props.navigation.navigate('App', data);
+    } else {
+        this.props.navigation.navigate('Auth');
+    }
+  }
+
+  _getData = (token) => {
+      fetch(`https://graph.facebook.com/me?access_token=${token}`)
+      .then((response) => response.json())
+      .then((res) => {
+          return {id: res.id, name:res.name}
+      })
+      .catch((err) => console.log('error occurred', err.message));
   }
 
   render() {

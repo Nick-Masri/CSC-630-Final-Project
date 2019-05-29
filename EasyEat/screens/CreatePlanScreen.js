@@ -1,45 +1,11 @@
 import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
 import { Text, View, Image, StyleSheet, TouchableOpacity, Alert, TextInput, Platform} from 'react-native';
-import { AccessToken } from 'react-native-fbsdk';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import TagInput from 'react-native-tag-input';
 import DatePicker from 'react-native-datepicker';
-import AsyncStorage from '@react-native-community/async-storage';
-
-const styles = StyleSheet.create({
-
-    plusIcon: {
-        fontSize: 30,
-        color: '#FFF',
-        backgroundColor: "#41B3A3",
-        paddingVertical: 20,
-        paddingHorizontal: 22,
-        borderRadius: 100,
-    },
-    footer: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        position: 'absolute',
-        right: 10,
-        bottom: 20,
-        flex: 1,
-    },
-});
-
-const inputProps = {
-    keyboardType: 'default',
-    placeholder: 'FB Name',
-    autoFocus: true,
-    style: {
-        fontSize: 14,
-        marginVertical: Platform.OS == 'ios' ? 10 : -2,
-    },
-};
-
 
 export default class App extends React.Component {
-
     constructor(props){
         super(props)
         this.state = {
@@ -49,7 +15,6 @@ export default class App extends React.Component {
             amount_payed: "",
             date: "",
             fbID: "",
-            accessToken: "",
         };
     }
 
@@ -57,56 +22,15 @@ export default class App extends React.Component {
         this.getData();
     }
 
-    onChangeTags = (tags) => {
-        this.setState({ tags });
-    }
-
-    onChangeText = (text) => {
-        this.setState({ text });
-
-        const lastTyped = text.charAt(text.length - 1);
-        const parseWhen = [',', ' ', ';', '\n'];
-
-        if (parseWhen.indexOf(lastTyped) > -1) {
-            this.setState({
-                tags: [...this.state.tags, this.state.text],
-                text: "",
-            });
-        }
-    }
 
     getData = async () => {
-        try {
-            const value = await AsyncStorage.getItem('@AccessToken');
-            if(value !== null) {
-                this.setState({accessToken: value})
-            }
-            this._getData();
-        } catch(e) {
-            console.log(e);
-            // error reading value
-        }
-    }
-
-    _getData = () => {
-        fetch(`https://graph.facebook.com/me?access_token=${this.state.accessToken}`)
-        .then((response) => response.json())
-        .then((res) => {
-            this.setState({
-                fbID: res.id,
-            });
-            console.log(res.id);
-            console.log(this.state.accessToken);
+        data = this.props.navigation.state.params;
+        this.setState({
+            fbID: data.id
         })
-        .catch((err) => console.log('error occurred', err.message));
     }
 
     submitPage = () => {
-        console.log(this.state.fbID)
-        console.log(this.state.location)
-        console.log(this.state.date)
-        console.log(this.state.amount_payed)
-        console.log(this.state.tags)
         fetch('https://lit-mountain-47024.herokuapp.com/plans', {
             method: 'POST',
             headers: {
@@ -125,6 +49,23 @@ export default class App extends React.Component {
     }
 
     labelExtractor = (tag) => tag;
+    onChangeTags = (tags) => {
+        this.setState({ tags });
+    }
+
+    onChangeText = (text) => {
+        this.setState({ text });
+
+        const lastTyped = text.charAt(text.length - 1);
+        const parseWhen = [',', ' ', ';', '\n'];
+
+        if (parseWhen.indexOf(lastTyped) > -1) {
+            this.setState({
+                tags: [...this.state.tags, this.state.text],
+                text: "",
+            });
+        }
+    }
 
     render() {
         return (
@@ -197,3 +138,34 @@ export default class App extends React.Component {
         );
     }
 }
+
+
+const styles = StyleSheet.create({
+
+    plusIcon: {
+        fontSize: 30,
+        color: '#FFF',
+        backgroundColor: "#41B3A3",
+        paddingVertical: 20,
+        paddingHorizontal: 22,
+        borderRadius: 100,
+    },
+    footer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        position: 'absolute',
+        right: 10,
+        bottom: 20,
+        flex: 1,
+    },
+});
+
+const inputProps = {
+    keyboardType: 'default',
+    placeholder: 'FB Name',
+    autoFocus: true,
+    style: {
+        fontSize: 14,
+        marginVertical: Platform.OS == 'ios' ? 10 : -2,
+    },
+};

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { LoginButton } from 'react-native-fbsdk';
-import AsyncStorage from '@react-native-community/async-storage';
 import { AccessToken } from 'react-native-fbsdk';
 
 export default class FBLoginButton extends Component {
@@ -10,64 +9,47 @@ export default class FBLoginButton extends Component {
         super(props);
         this.state = ({
             auth: this.props.auth,
-            accessToken: "",
-            loading: false
         });
     }
 
-    appInfo = () => {
-        console.log(this.props.auth)
+    handleLogin = async () => {
         if (this.props.auth == 'signup') {
-            this._registerUser();
+            await this._registerUser()
         }
-        this._getUserInfo();
-        return "registered users";
+        this.props.nav.navigate('AuthLoading');
     }
 
-    _getUserInfo = async () => {
-        AccessToken.getCurrentAccessToken()
-        .then((data) => {
-            this.setState({accessToken: data.accessToken.toString()})
-        })
-        .then(() => {
-            this._getData();
-            AsyncStorage.setItem('@AccessToken', this.state.accessToken).then(() => {
-                this.props.nav.navigate('App');
-                console.log("stored access token");
-                console.log(this.state.accessToken);
-            });
-        });// end getCurrentAccessToken
-    }
-
-    _getData = () => {
-
-        fetch(`https://graph.facebook.com/me?access_token=${this.state.accessToken}`)
-        .then((response) => response.json())
-        .then((res) => {
-            this.setState({
-                fbID: res.id,
-            });
-            console.log(res.id);
-            console.log(this.state.accessToken);
-        })
-        .catch((err) => console.log('error occurred', err.message));
-    }
-
-    _registerUser = () => {
+    _registerUser = async () => {
+        const token = await this._getAccessToken();
+        const data = await this._getID(token);
         fetch('https://lit-mountain-47024.herokuapp.com/users', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-                facebook_id: this.state.fbId,
-                name: this.state.name,
+                facebook_id: data.id,
+                name: data.name,
             }),
         }).then(() => {
-            console.log("registered user in database")
+            console.log("registered user in database");
         });
     }
 
+    _getAccessToken = () => {
+        AccessToken.getCurrentAccessToken().then((res) => {
+            return res.accessToken.toString()
+        });
+    }
+
+    _getID = (token) => {
+        fetch(`https://graph.facebook.com/me?access_token=${token}`)
+        .then((response) => response.json())
+        .then((res) => {
+            return ({id: res.id, name:res.name});
+        })
+        .catch((err) => console.log('error occurred', err.message));
+    }
 
     render() {
         return (
@@ -80,7 +62,7 @@ export default class FBLoginButton extends Component {
                     } else if (result.isCancelled) {
                         alert("Login was cancelled");
                     } else {
-                        this.appInfo();
+                        this.handleLogin();
                     }
                 }
             }

@@ -2,7 +2,102 @@ import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
 import { StyleSheet, TouchableOpacity, FlatList, View, Text, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AsyncStorage from '@react-native-community/async-storage';
+
+export default class FirstPage extends Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            loading: true,
+            params: {},
+            data: [],
+        }
+    }
+
+    componentDidMount = () => {
+        this._getData();
+    }
+
+    _getData = () => {
+        data = this.props.navigation.state.params;
+        fetch(`https://lit-mountain-47024.herokuapp.com/users?id=${data.id}`)
+        .then((response) => response.json())
+        .then((res) => {
+            if (res.data.length !== 0){
+                this.setState({
+                    data: res.data,
+                    parms: data,
+                    loading: false,
+                });
+            }
+        });
+    }
+
+    static navigationOptions = {
+        header: null
+    };
+
+    renderItem = (data) => {
+
+        return (
+            <View style={styles.listItem}>
+            <View style={styles.listMainRow}>
+            <Text style={styles.listHeader}>{data.item.listHeader}</Text>
+            </View>
+            <View>
+            <Text style={styles.friends}>With: {data.item.friends}</Text>
+            </View>
+            <View style={styles.listInfo}>
+            <Text style={styles.listInfoText}>You paid ${data.item.cost}</Text>
+            <Text style={styles.listInfoText}>{data.item.date}</Text>
+            </View>
+            </View>
+        );
+    }
+
+    render() {
+        return (
+            <View style={styles.page}>
+
+            <View style={styles.navbar}>
+
+            <View style={styles.mainNav}>
+            {    //<Icon name="bars" style={styles.menuIcon}/>
+        }
+        <Text style={styles.pageHeader}>History</Text>
+        </View>
+
+        {
+            //     <View style={styles.tab}>
+            //     <View style={[styles.tabHeader, styles.highlight]}>
+            //         <Text style={styles.tabText}>Me</Text>
+            //     </View>
+            //     <View style={styles.tabHeader}>
+            //         <Text style={styles.tabText}>Friends</Text>
+            //     </View>
+            // </View>
+        }
+        </View>
+
+        <View style={styles.pageContainer}>
+        <View style={styles.widthContainer}>
+        <FlatList
+        contentContainerStyle={styles.list}
+        data={this.state.data}
+        extraData={this.state}
+        renderItem={this.renderItem}
+        />
+        <View style={styles.footer}>
+        <Icon name="plus" style={styles.plusIcon} onPress={() => {this.props.navigation.navigate('New', this.state.params)}}/>
+        </View>
+        </View>
+        </View>
+
+        </View>
+    );
+}
+}
+
 
 const styles = StyleSheet.create({
     pageContainer: {
@@ -131,104 +226,3 @@ const styles = StyleSheet.create({
         fontSize: 24,
     }
 });
-
-export default class FirstPage extends Component {
-
-    constructor(props){
-        super(props);
-        this.state = {
-            accessToken: '',
-            fbID:'',
-            name: '',
-            data: [],
-        }
-
-    }
-
-    componentDidMount = () => {
-        this._getData();
-    }
-
-    _getData = () => {
-        AsyncStorage.getItem('@accessToken').then((result) => {
-            this.setState({accessToken: result});
-        });
-      }
-
-
-    getMeals = () => {
-        fetch(`https://lit-mountain-47024.herokuapp.com/users?id=${this.state.fbID}`)
-        .then((response) => response.json())
-        .then((res) => {
-            if (res.data.length !== 0){
-                this.setState({
-                    data: res.data,
-                })
-            }
-        });
-    }
-
-    static navigationOptions = {
-        header: null
-    };
-
-    renderItem = (data) => {
-
-        return (
-            <View style={styles.listItem}>
-            <View style={styles.listMainRow}>
-            <Text style={styles.listHeader}>{data.item.listHeader}</Text>
-            </View>
-            <View>
-            <Text style={styles.friends}>With: {data.item.friends}</Text>
-            </View>
-            <View style={styles.listInfo}>
-            <Text style={styles.listInfoText}>You paid ${data.item.cost}</Text>
-            <Text style={styles.listInfoText}>{data.item.date}</Text>
-            </View>
-            </View>
-        );
-    }
-
-    render() {
-        return (
-            <View style={styles.page}>
-
-            <View style={styles.navbar}>
-
-            <View style={styles.mainNav}>
-            {    //<Icon name="bars" style={styles.menuIcon}/>
-        }
-        <Text style={styles.pageHeader}>History</Text>
-        </View>
-
-        {
-            //     <View style={styles.tab}>
-            //     <View style={[styles.tabHeader, styles.highlight]}>
-            //         <Text style={styles.tabText}>Me</Text>
-            //     </View>
-            //     <View style={styles.tabHeader}>
-            //         <Text style={styles.tabText}>Friends</Text>
-            //     </View>
-            // </View>
-        }
-        </View>
-
-        <View style={styles.pageContainer}>
-        <View style={styles.widthContainer}>
-        <FlatList
-        contentContainerStyle={styles.list}
-        data={this.state.data}
-        extraData={this.state}
-        renderItem={this.renderItem}
-        />
-        <View style={styles.footer}>
-        <Icon name="plus" style={styles.plusIcon} onPress={() => {this.props.navigation.navigate('New')}}/>
-        </View>
-        </View>
-        </View>
-
-        </View>
-    );
-}
-}

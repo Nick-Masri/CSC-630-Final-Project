@@ -1,6 +1,35 @@
 import React, { Component } from 'react';
-import { Text, View, Image, StyleSheet, TouchableOpacity, Alert} from 'react-native';
+import { Text, View, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
+export default class FirstPage extends Component {
+
+  static navigationOptions = {
+    header: null,
+  }; // removes navigation header that comes with react navigation
+
+  render() {
+    return (
+      <View style={styles.pageContainer}>
+        <View style={styles.widthContainer}>
+          <Text style={styles.appName}>Easy Eat</Text>
+          <Image source={require('./../assets/table.png')} style={styles.logo} />
+          <TouchableOpacity
+            style={[styles.loginButton, styles.button]}
+            onPress={() => this.props.navigation.navigate('Login')}
+            >
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.signUpButton, styles.button]}
+            onPress={() => this.props.navigation.navigate('SignUp')}
+            >
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   pageContainer: {
@@ -50,33 +79,3 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
 });
-
-export default class FirstPage extends Component {
-
-  static navigationOptions = {
-    header: null,
-  }; // removes navigation header that comes with react navigation
-
-  render() {
-    return (
-      <View style={styles.pageContainer}>
-        <View style={styles.widthContainer}>
-          <Text style={styles.appName}>Easy Eat</Text>
-          <Image source={require('./../assets/table.png')} style={styles.logo} />
-          <TouchableOpacity
-            style={[styles.loginButton, styles.button]}
-            onPress={() => this.props.navigation.navigate('Login')}
-            >
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.signUpButton, styles.button]}
-            onPress={() => this.props.navigation.navigate('SignUp')}
-            >
-            <Text style={styles.buttonText}>Sign Up</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
-}

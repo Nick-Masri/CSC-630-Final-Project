@@ -2,7 +2,23 @@ import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
 import { Text, View, Image, StyleSheet, TouchableOpacity, Alert, TextInput } from 'react-native';
 
-import FBLoginButton from './../components/facebook-button.js'
+import FBLoginButton from './../components/facebook-button.js';
+
+export default class FirstPage extends Component {
+
+  render() {
+    return (
+      <View style={styles.pageContainer}>
+        <View style={styles.widthContainer}>
+          <Text style={styles.appName}>Login</Text>
+          <Image source={require('./../assets/table.png')} style={styles.logo} />
+          <Text style={{color: '#FFF'}}>Login with</Text>
+          <FBLoginButton nav={this.props.navigation}auth="login" styles={[styles.button, styles.facebook]} />
+        </View>
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   pageContainer: {
@@ -77,20 +93,3 @@ const styles = StyleSheet.create({
     borderColor: '#0000CC',
   }
 });
-
-
-export default class FirstPage extends Component {
-
-  render() {
-    return (
-      <View style={styles.pageContainer}>
-        <View style={styles.widthContainer}>
-          <Text style={styles.appName}>Login</Text>
-          <Image source={require('./../assets/table.png')} style={styles.logo} />
-          <Text style={{color: '#FFF'}}>Login with</Text>
-          <FBLoginButton nav={this.props.navigation}auth="login" styles={[styles.button, styles.facebook]} />
-        </View>
-      </View>
-    );
-  }
-}

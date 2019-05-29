@@ -88,7 +88,7 @@ export default class FirstPage extends Component {
           <Text style={styles.appName}>Sign Up</Text>
           <Image source={require('./../assets/table.png')} style={styles.logo} />
           <Text style={{color: '#FFF'}}>Sign Up with</Text>
-          <FBLoginButton styles={styles.button, styles.facebook} />
+          <FBLoginButton auth="signup" styles={styles.button, styles.facebook} />
         </View>
       </View>
     );

@@ -7,27 +7,25 @@ module.exports = {
   initialize: function(knex){
     knex.schema.hasTable('users').then(function(exists){
       if(!exists) knex.schema.createTable('users', function(table){
-        table.increments('user_id');
-        table.string('email');
-        table.string('password');
+        table.integer('facebook_id');
+        table.string('name');
       })
       .then(function(){
         console.log("Successfully created 'users' table");
       });
     });
 
-    knex.schema.hasTable('place').then(function(exists){
+    knex.schema.hasTable('meals').then(function(exists){
       if(!exists) knex.schema.createTable('people', function(table){
-        table.increments('id');
-        table.string('location');
+        table.integer('facebook_id');
+        table.string('location_name');
         table.string('friends');
         table.integer('amount_payed');
-        table.integer('stars');
+        table.string('date');
       })
       .then(function(){
-        console.log("Successfully created 'people' table");
+        console.log("Successfully created 'meals' table");
       });
     });
   },
-
 }

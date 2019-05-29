@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
 import { StyleSheet, TouchableOpacity, FlatList, View, Text, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AsyncStorage from '@react-native-community/async-storage';
 
 const styles = StyleSheet.create({
     pageContainer: {
@@ -19,14 +18,14 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     navbar: {
-        height: 150,
+        height: 75,
         flexDirection: 'column',
         backgroundColor: '#41B3A3',
         justifyContent: 'space-between',
         marginBottom: 20,
     },
     mainNav: {
-        flex: 2,
+        flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
@@ -138,37 +137,20 @@ export default class FirstPage extends Component {
     constructor(props){
         super(props);
         this.state = {
-            tab: ""
+            tab: "",
         }
     }
-    // 
-    // componentDidMount() {
-    //     this.getData();
-    // }
 
     static navigationOptions = {
         header: null
     };
-    //
-    // getData = async () => {
-    //   try {
-    //     const value = await AsyncStorage.getItem('userInfo')
-    //     if(value !== null) {
-    //       alert(value);
-    //     }
-    //     alert(value);
-    //   } catch(e) {
-    //       alert(e);
-    //     // error reading value
-    //   }
-    // }
 
     renderItem = (data) => {
+
         return (
             <View style={styles.listItem}>
                 <View style={styles.listMainRow}>
                     <Text style={styles.listHeader}>{data.item.listHeader}</Text>
-                    <Icon name={data.item.starred ? 'star' : 'star-o'} style={data.item.starred ? styles.star : styles.staro} />
                 </View>
                 <View>
                     <Text style={styles.friends}>With: {data.item.friends}</Text>
@@ -188,20 +170,21 @@ export default class FirstPage extends Component {
                 <View style={styles.navbar}>
 
                     <View style={styles.mainNav}>
-                        <Icon name="bars" style={styles.menuIcon}/>
-                        <Text style={styles.pageHeader}>Home</Text>
-                        <View style={styles.filler}/>
+                    {    //<Icon name="bars" style={styles.menuIcon}/>
+                    }
+                        <Text style={styles.pageHeader}>History</Text>
                     </View>
 
-                    <View style={styles.tab}>
-                        <View style={[styles.tabHeader, styles.highlight]}>
-                            <Text style={styles.tabText}>Me</Text>
-                        </View>
-                        <View style={styles.tabHeader}>
-                            <Text style={styles.tabText}>Friends</Text>
-                        </View>
-                    </View>
-
+                    {
+                    //     <View style={styles.tab}>
+                    //     <View style={[styles.tabHeader, styles.highlight]}>
+                    //         <Text style={styles.tabText}>Me</Text>
+                    //     </View>
+                    //     <View style={styles.tabHeader}>
+                    //         <Text style={styles.tabText}>Friends</Text>
+                    //     </View>
+                    // </View>
+                    }
                 </View>
 
                 <View style={styles.pageContainer}>
@@ -213,18 +196,17 @@ export default class FirstPage extends Component {
                             friends: "Jack, Jenn, and Jake",
                             cost: "28",
                             date: "5/28/19",
-                            starred: true
                         }, {
                             listHeader: "Lunch at La Rosas",
                             friends: "Catherine",
                             cost: "17",
-                            starred: false,
                             date: "5/22/19"
                         }]}
+                        extraData={this.state}
                         renderItem={this.renderItem}
                         />
                         <View style={styles.footer}>
-                            <Icon name="plus" style={styles.plusIcon}/>
+                            <Icon name="plus" style={styles.plusIcon} onPress={() => {this.props.navigation.navigate('New')}}/>
                         </View>
                     </View>
                 </View>

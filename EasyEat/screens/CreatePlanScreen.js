@@ -4,7 +4,8 @@ import { Text, View, Image, StyleSheet, TouchableOpacity, Alert, TextInput, Plat
 import { AccessToken } from 'react-native-fbsdk';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import TagInput from 'react-native-tag-input';
-import DatePicker from 'react-native-datepicker'
+import DatePicker from 'react-native-datepicker';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const styles = StyleSheet.create({
 
@@ -48,13 +49,12 @@ export default class App extends React.Component {
             amount_payed: "",
             date: "",
             fbID: "",
+            accessToken: "",
         };
     }
 
     componentDidMount = () => {
-        this.getData.then(() => {
-            console.log('got fbID');
-        })
+        this.getData();
     }
 
     onChangeTags = (tags) => {
@@ -77,23 +77,43 @@ export default class App extends React.Component {
 
     getData = async () => {
         try {
-            const value = await AsyncStorage.getItem('@fbID')
+            const value = await AsyncStorage.getItem('@AccessToken');
             if(value !== null) {
-                this.setState({fbID: value})
+                this.setState({accessToken: value})
             }
+            this._getData();
         } catch(e) {
+            console.log(e);
             // error reading value
         }
     }
 
+    _getData = () => {
+        fetch(`https://graph.facebook.com/me?access_token=${this.state.accessToken}`)
+        .then((response) => response.json())
+        .then((res) => {
+            this.setState({
+                fbID: res.id,
+            });
+            console.log(res.id);
+            console.log(this.state.accessToken);
+        })
+        .catch((err) => console.log('error occurred', err.message));
+    }
+
     submitPage = () => {
+        console.log(this.state.fbID)
+        console.log(this.state.location)
+        console.log(this.state.date)
+        console.log(this.state.amount_payed)
+        console.log(this.state.tags)
         fetch('https://lit-mountain-47024.herokuapp.com/plans', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-                fbID: this.state.fbID,
+                facebook_id: this.state.fbID,
                 location_name: this.state.location,
                 date: this.state.date,
                 amount_payed: this.state.amount_payed,
@@ -171,7 +191,7 @@ export default class App extends React.Component {
             />
             </View>
             <View style={styles.footer}>
-            <Icon name="arrow-right" style={styles.plusIcon} onPress={() => {this.submitPage}}/>
+            <Icon.Button name="arrow-right" style={styles.plusIcon} onPress={() => {this.submitPage()}}/>
             </View>
             </View>
         );

@@ -17,7 +17,7 @@ module.exports = {
 
     knex.schema.hasTable('plans').then(function(exists){
       if(!exists) knex.schema.createTable('plans', function(table){
-        table.integer('facebook_id');
+        table.bigInteger('facebook_id');
         table.string('location_name');
         table.string('friends');
         table.integer('amount_payed');

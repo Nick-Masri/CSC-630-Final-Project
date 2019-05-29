@@ -11,25 +11,46 @@ export default class FBLoginButton extends Component {
         this.state = ({
             auth: this.props.auth,
             accessToken: "",
+            loading: false
         });
     }
-    componentDidMount = () => {
+
+    appInfo = () => {
+        console.log(this.props.auth)
         if (this.props.auth == 'signup') {
             this._registerUser();
         }
         this._getUserInfo();
+        return "registered users";
     }
 
     _getUserInfo = async () => {
-        AccessToken.getCurrentAccessToken().then(
-        (data) => {
+        AccessToken.getCurrentAccessToken()
+        .then((data) => {
             this.setState({accessToken: data.accessToken.toString()})
-        }).then(() => {
+        })
+        .then(() => {
+            this._getData();
             AsyncStorage.setItem('@AccessToken', this.state.accessToken).then(() => {
+                this.props.nav.navigate('App');
                 console.log("stored access token");
                 console.log(this.state.accessToken);
             });
         });// end getCurrentAccessToken
+    }
+
+    _getData = () => {
+
+        fetch(`https://graph.facebook.com/me?access_token=${this.state.accessToken}`)
+        .then((response) => response.json())
+        .then((res) => {
+            this.setState({
+                fbID: res.id,
+            });
+            console.log(res.id);
+            console.log(this.state.accessToken);
+        })
+        .catch((err) => console.log('error occurred', err.message));
     }
 
     _registerUser = () => {
@@ -59,8 +80,7 @@ export default class FBLoginButton extends Component {
                     } else if (result.isCancelled) {
                         alert("Login was cancelled");
                     } else {
-                        // alert("Login was successful with permissions: " + result.grantedPermissions);
-                        this.props.nav.navigate('App');
+                        this.appInfo();
                     }
                 }
             }

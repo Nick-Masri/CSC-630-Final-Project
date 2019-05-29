@@ -152,19 +152,6 @@ export default class FirstPage extends Component {
     _getData = () => {
         AsyncStorage.getItem('@accessToken').then((result) => {
             this.setState({accessToken: result});
-        }).then(() => {
-            fetch(`https://graph.facebook.com/me?access_token=${this.state.accessToken}`)
-            .then((response) => response.json())
-            .then((res) => {
-                this.setState({
-                    name: res.name,
-                    fbID: res.id,
-                });
-                console.log(res.name);
-                console.log(res.id);
-                console.log(this.state.accessToken);
-            })
-            .catch((err) => console.log('error occurred', err.message));
         });
       }
 
@@ -173,7 +160,6 @@ export default class FirstPage extends Component {
         fetch(`https://lit-mountain-47024.herokuapp.com/users?id=${this.state.fbID}`)
         .then((response) => response.json())
         .then((res) => {
-
             if (res.data.length !== 0){
                 this.setState({
                     data: res.data,

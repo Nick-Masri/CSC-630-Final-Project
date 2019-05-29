@@ -15,8 +15,8 @@ module.exports = {
       });
     });
 
-    knex.schema.hasTable('meals').then(function(exists){
-      if(!exists) knex.schema.createTable('people', function(table){
+    knex.schema.hasTable('plans').then(function(exists){
+      if(!exists) knex.schema.createTable('plans', function(table){
         table.integer('facebook_id');
         table.string('location_name');
         table.string('friends');
@@ -24,7 +24,7 @@ module.exports = {
         table.string('date');
       })
       .then(function(){
-        console.log("Successfully created 'meals' table");
+        console.log("Successfully created 'plans' table");
       });
     });
   },

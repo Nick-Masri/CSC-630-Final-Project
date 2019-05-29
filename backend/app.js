@@ -61,8 +61,8 @@ app.post("/users", function(req, res) {
 });
 
 // Create plan
-app.post("/meals", function(req, res) {
-    knex("meals").insert({
+app.post("/plans", function(req, res) {
+    knex("plans").insert({
         facebook_id: req.body['facebook_id'],
         location_name: req.body['location_name'],
         friends: req.body['friends'],

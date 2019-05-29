@@ -69,8 +69,8 @@ app.post("/users", function(req, res) {
   knex("select").select().where("facebook_id", req.body['facebook_id']).then((response) => {
     if (!response.length){ // Check if the username doesn't already exist
       knex("users").insert({
-        facebook_id: req.body['facebook_id'],
-        name: req.body['name']
+        facebook_id: req.body.facebook_id,
+        name: req.body.name
       }).then(function() {
         res.status(200).send("successfully added user to database");
       })

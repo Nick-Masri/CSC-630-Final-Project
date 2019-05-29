@@ -170,7 +170,7 @@ export default class FirstPage extends Component {
 
 
     getMeals = () => {
-        fetch(`localhost?id=${this.state.fbID}`)
+        fetch(`https://lit-mountain-47024.herokuapp.com/users?id=${this.state.fbID}`)
         .then((response) => response.json())
         .then((res) => {
 

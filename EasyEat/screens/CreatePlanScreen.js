@@ -87,7 +87,7 @@ export default class App extends React.Component {
     }
 
     submitPage = () => {
-        fetch('localhost/plans', {
+        fetch('https://lit-mountain-47024.herokuapp.com/plans', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

@@ -29,7 +29,7 @@ export default class FBLoginButton extends Component {
     }
 
     _registerUser = () => {
-        fetch('localhost/users', {
+        fetch('https://lit-mountain-47024.herokuapp.com/users', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

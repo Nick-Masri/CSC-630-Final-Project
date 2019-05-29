@@ -12,12 +12,7 @@ app.use(bodyParser.json())
 // Knex Setup
 var knex = require('knex')({
   client: 'pg',
-  connection: {
-      host : 'localhost',
-      user : 'postgres',
-      password : 'nick123',
-      database : 'EasyEats'
-    },
+  connection: process.env.DATABASE_URL,
   ssl: true
 });
 require('knex-paginator')(knex);

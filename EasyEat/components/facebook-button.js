@@ -11,9 +11,13 @@ export default class FBLoginButton extends Component {
         this.state = ({
             auth: this.props.auth,
             accessToken: "",
-        })
-
-
+        });
+    }
+    componentDidMount = () => {
+        if (this.props.auth == 'signup') {
+            this._registerUser();
+        }
+        this._getUserInfo();
     }
 
     _getUserInfo = async () => {
@@ -55,16 +59,8 @@ export default class FBLoginButton extends Component {
                     } else if (result.isCancelled) {
                         alert("Login was cancelled");
                     } else {
-                        alert("Login was successful with permissions: " + result.grantedPermissions);
-                         if (this.props.auth == 'signup'){
-                            this._registerUser();
-                        }
-
-                        this._getUserInfo().then(()=> {
-                            console.log(this.props.nav);
-                            this.props.nav.navigate('App');
-                        });
-
+                        // alert("Login was successful with permissions: " + result.grantedPermissions);
+                        this.props.nav.navigate('App');
                     }
                 }
             }

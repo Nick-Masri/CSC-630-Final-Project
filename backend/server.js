@@ -48,8 +48,7 @@ app.get("/users", function(req, res){
     .catch(function(e){
       console.log(e);
       res.status(500);
-      res.send("ERROR");
-      res.send(e);
+      res.send("ERROR:" + e);
     });
 });
 

@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const express = require("express");
 const app = express();
 
@@ -30,7 +28,7 @@ app.get("/", function(req, res){
 
 // Search users
 app.get("/users", function(req, res){
-  knex.from("people")
+  knex.from("users")
     .select("*")
     .modify(function(queryBuilder){
       if("name" in req.query) queryBuilder.where('search_body', 'like', '%' + req.query.name.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "").toLowerCase() + '%');
@@ -49,7 +47,7 @@ app.get("/users", function(req, res){
 
 // Search Plans
 app.get("/plans", function(req, res){
-  knex.from("people")
+  knex.from("plans")
     .select("*")
     .modify(function(queryBuilder){
       if("id" in req.query) queryBuilder.where('facebook_id', req.query.id);

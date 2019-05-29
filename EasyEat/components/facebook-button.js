@@ -32,8 +32,7 @@ export default class FBLoginButton extends Component {
         fetch('https://lit-mountain-47024.herokuapp.com/users', {
             method: 'POST',
             headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
+                'content-type': 'application/json',
             },
             body: JSON.stringify({
                 facebook_id: this.state.fbId,

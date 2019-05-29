@@ -90,8 +90,7 @@ export default class App extends React.Component {
         fetch('https://lit-mountain-47024.herokuapp.com/plans', {
             method: 'POST',
             headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
+                'content-type': 'application/json',
             },
             body: JSON.stringify({
                 fbID: this.state.fbID,

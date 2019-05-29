@@ -67,7 +67,7 @@ app.get("/plans", function(req, res){
 // Create users
 app.post("/users", function(req, res) {
     console.log(req.body);
-    knex("select").select().where("facebook_id", req.body.facebook_id).then((response) => {
+    knex("users").select().where("facebook_id", req.body.facebook_id).then((response) => {
         if (!response.length){ // Check if the username doesn't already exist
         knex("users").insert({
             facebook_id: req.body.facebook_id,

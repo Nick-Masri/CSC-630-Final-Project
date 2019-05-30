@@ -18,6 +18,13 @@ export default class FirstPage extends Component {
         this._getData();
     }
 
+    const didBlurSubscription = this.props.navigation.addListener(
+        'didBlur',
+        payload => {
+
+            console.debug('didBlur', payload);
+        }
+    );
     _getData = () => {
         data = this.props.navigation.state.params;
         fetch(`https://lit-mountain-47024.herokuapp.com/plans?id=${data.id}`)
@@ -38,7 +45,20 @@ export default class FirstPage extends Component {
     };
 
     renderItem = (data) => {
-        console.log(data.item)
+        let filtered = data.item.friends.split(/[{\,}\"]+/);
+        let friends = ""
+        filtered.forEach(function(item, index) {
+            if (item !== "") {
+                if (index == filtered.length - 2) {
+                    friends += item;
+                } else {
+                    friends += item + ', ';
+                }
+            }
+        })
+
+
+        console.log(friends);
 
         return (
             <View style={styles.listItem}>
@@ -46,7 +66,7 @@ export default class FirstPage extends Component {
             <Text style={styles.listHeader}>{data.item.location_name}</Text>
             </View>
             <View>
-            <Text style={styles.friends}>With: {typeof data.item.friends}</Text>
+            <Text style={styles.friends}>With: {friends}</Text>
             </View>
             <View style={styles.listInfo}>
             <Text style={styles.listInfoText}>You paid ${data.item.amount_payed}</Text>

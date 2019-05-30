@@ -20,13 +20,13 @@ export default class FirstPage extends Component {
 
     _getData = () => {
         data = this.props.navigation.state.params;
-        fetch(`https://lit-mountain-47024.herokuapp.com/users?id=${data.id}`)
+        fetch(`https://lit-mountain-47024.herokuapp.com/plans?id=${data.id}`)
         .then((response) => response.json())
         .then((res) => {
             if (res.data.length !== 0){
                 this.setState({
                     data: res.data,
-                    parms: data,
+                    params: data,
                     loading: false,
                 });
             }
@@ -38,17 +38,18 @@ export default class FirstPage extends Component {
     };
 
     renderItem = (data) => {
+        console.log(data.item)
 
         return (
             <View style={styles.listItem}>
             <View style={styles.listMainRow}>
-            <Text style={styles.listHeader}>{data.item.listHeader}</Text>
+            <Text style={styles.listHeader}>{data.item.location_name}</Text>
             </View>
             <View>
-            <Text style={styles.friends}>With: {data.item.friends}</Text>
+            <Text style={styles.friends}>With: {typeof data.item.friends}</Text>
             </View>
             <View style={styles.listInfo}>
-            <Text style={styles.listInfoText}>You paid ${data.item.cost}</Text>
+            <Text style={styles.listInfoText}>You paid ${data.item.amount_payed}</Text>
             <Text style={styles.listInfoText}>{data.item.date}</Text>
             </View>
             </View>
@@ -86,6 +87,7 @@ export default class FirstPage extends Component {
         data={this.state.data}
         extraData={this.state}
         renderItem={this.renderItem}
+        keyExtractor={(item, index) => index.toString()}
         />
         <View style={styles.footer}>
         <Icon name="plus" style={styles.plusIcon} onPress={() => {this.props.navigation.navigate('New', this.state.params)}}/>

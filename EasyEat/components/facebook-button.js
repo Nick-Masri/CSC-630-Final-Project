@@ -7,9 +7,7 @@ export default class FBLoginButton extends Component {
 
     constructor(props){
         super(props);
-        this.state = ({
-            auth: this.props.auth,
-        });
+
     }
 
     handleLogin = async () => {
@@ -20,35 +18,26 @@ export default class FBLoginButton extends Component {
     }
 
     _registerUser = async () => {
-        const token = await this._getAccessToken();
-        const data = await this._getID(token);
-        fetch('https://lit-mountain-47024.herokuapp.com/users', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json',
-            },
-            body: JSON.stringify({
-                facebook_id: data.id,
-                name: data.name,
-            }),
-        }).then(() => {
-            console.log("registered user in database");
-        });
-    }
+        AccessToken.getCurrentAccessToken().then((accessToken) => {
+            token = accessToken.accessToken.toString();
+            fetch(`https://graph.facebook.com/me?access_token=${token}`)
+            .then((response) => response.json())
+            .then((res) => {
 
-    _getAccessToken = () => {
-        AccessToken.getCurrentAccessToken().then((res) => {
-            return res.accessToken.toString()
-        });
-    }
-
-    _getID = (token) => {
-        fetch(`https://graph.facebook.com/me?access_token=${token}`)
-        .then((response) => response.json())
-        .then((res) => {
-            return ({id: res.id, name:res.name});
+                fetch('https://lit-mountain-47024.herokuapp.com/users', {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        facebook_id: res.id,
+                        name: res.name,
+                    }),
+                }).then(() => {
+                    console.log("registered user in database");
+                });
+            })
         })
-        .catch((err) => console.log('error occurred', err.message));
     }
 
     render() {

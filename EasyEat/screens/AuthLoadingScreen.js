@@ -8,25 +8,37 @@ export default class FirstPage extends Component {
     this.redirect();
   }
 
-  redirect = async () => {
-    const accessToken = await AccessToken.getCurrentAccessToken();
-    const isLoggedIn = accessToken != null && accessToken.getExpires();
+  // componentDidMount = () => {
+  //
+  // }
 
-    if (isLoggedIn){
-        const data = await this._getData(accessToken);
-        console.log(accessToken);
-        data.token = accessToken.toString();
-        this.props.navigation.navigate('App', data);
-    } else {
-        this.props.navigation.navigate('Auth');
-    }
+  redirect = () => {
+    AccessToken.getCurrentAccessToken().then((accessToken) => {
+        isLoggedIn = accessToken != null && accessToken.getExpires();
+        if (isLoggedIn){
+            token = accessToken.accessToken.toString();
+            fetch(`https://graph.facebook.com/me?access_token=${token}`)
+            .then((response) => response.json())
+            .then((res) => {
+                data = {id:res.id, name:res.name, token:token}
+                console.log(data);
+                this.props.navigation.navigate('Home', data);
+            });
+        } else {
+            this.props.navigation.navigate('Auth');
+        }
+    })
+    .catch((err) => {
+        console.log(err);
+    });
   }
 
-  _getData = (token) => {
+  getData = (token) => {
       fetch(`https://graph.facebook.com/me?access_token=${token}`)
       .then((response) => response.json())
       .then((res) => {
-          return {id: res.id, name:res.name}
+          data = {id: res.id, name:res.name}
+          return data
       })
       .catch((err) => console.log('error occurred', err.message));
   }

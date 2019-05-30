@@ -25,7 +25,6 @@ export default class App extends React.Component {
 
     getData = async () => {
         data = this.props.navigation.state.params;
-        console.log(data);
         this.setState({
             fbID: data.id
         })

@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 import { Button } from 'react-native-elements';
 import { StyleSheet, TouchableOpacity, FlatList, View, Text, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+const FBSDK = require('react-native-fbsdk');
+const {
+    LoginManager,
+} = FBSDK;
 
 export default class FirstPage extends Component {
 
     constructor(props){
         super(props);
         this.state = {
-            loading: true,
             params: {},
             data: [],
         }
@@ -18,13 +21,7 @@ export default class FirstPage extends Component {
         this._getData();
     }
 
-    const didBlurSubscription = this.props.navigation.addListener(
-        'didBlur',
-        payload => {
 
-            console.debug('didBlur', payload);
-        }
-    );
     _getData = () => {
         data = this.props.navigation.state.params;
         fetch(`https://lit-mountain-47024.herokuapp.com/plans?id=${data.id}`)
@@ -34,7 +31,6 @@ export default class FirstPage extends Component {
                 this.setState({
                     data: res.data,
                     params: data,
-                    loading: false,
                 });
             }
         });
@@ -84,42 +80,42 @@ export default class FirstPage extends Component {
 
             <View style={styles.mainNav}>
             {    //<Icon name="bars" style={styles.menuIcon}/>
-        }
-        <Text style={styles.pageHeader}>History</Text>
-        </View>
+            }
 
-        {
-            //     <View style={styles.tab}>
-            //     <View style={[styles.tabHeader, styles.highlight]}>
-            //         <Text style={styles.tabText}>Me</Text>
-            //     </View>
-            //     <View style={styles.tabHeader}>
-            //         <Text style={styles.tabText}>Friends</Text>
-            //     </View>
-            // </View>
-        }
-        </View>
+            <Text style={styles.pageHeader}>History</Text>
+            </View>
 
-        <View style={styles.pageContainer}>
-        <View style={styles.widthContainer}>
-        <FlatList
-        contentContainerStyle={styles.list}
-        data={this.state.data}
-        extraData={this.state}
-        renderItem={this.renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        />
-        <View style={styles.footer}>
-        <Icon name="plus" style={styles.plusIcon} onPress={() => {this.props.navigation.navigate('New', this.state.params)}}/>
-        </View>
-        </View>
-        </View>
+            {
+                //     <View style={styles.tab}>
+                //     <View style={[styles.tabHeader, styles.highlight]}>
+                //         <Text style={styles.tabText}>Me</Text>
+                //     </View>
+                //     <View style={styles.tabHeader}>
+                //         <Text style={styles.tabText}>Friends</Text>
+                //     </View>
+                // </View>
+            }
+            </View>
 
-        </View>
-    );
+            <View style={styles.pageContainer}>
+            <View style={styles.widthContainer}>
+            <FlatList
+            contentContainerStyle={styles.list}
+            data={this.state.data}
+            extraData={this.state}
+            renderItem={this.renderItem}
+            keyExtractor={(item, index) => index.toString()}
+            />
+            <View style={styles.footer}>
+            <Icon name="plus" style={styles.plusIcon} onPress={() => {this.props.navigation.navigate('New', this.state.params)}}/>
+            </View>
+            </View>
+            </View>
+
+            </View>
+        );
+    }
 }
-}
-
 
 const styles = StyleSheet.create({
     pageContainer: {
